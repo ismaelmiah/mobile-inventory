@@ -11,8 +11,10 @@ import {
   ChipProps,
   useDisclosure,
 } from "@nextui-org/react";
+import { ProductSearchBar } from "@/components/product-search-bar";
 import { categories, status, columns, Product } from "@/models";
 import { EditIcon, MobileIcon, DeleteIcon } from "@/models/Icon";
+
 export async function getServerSideProps() {
   //const res = await fetch('https://sheetdb.io/api/v1/j5309zo0rjobp');
   //const products = await res.json();
@@ -138,6 +140,16 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
   return (
     <>
       <Table
+        topContent={
+          <ProductSearchBar
+            onOpen={entryModal.onOpen}
+            onSearchChange={onSearchChange}
+            phoneCategories={categories}
+            setCategoryFilter={setCategoryFilter}
+            setStatusFilter={setStatusFilter}
+            statusOptions={status}
+          />
+        }
         aria-label="Product table"
       >
         <TableHeader columns={columns}>
