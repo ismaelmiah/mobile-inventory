@@ -82,11 +82,27 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const hasSearchFilter = Boolean(filterValue);
   const filteredItems = useMemo(() => {
     let filteredProducts = products;
+    if (hasSearchFilter) {
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          product.imei.includes(filterValue) ||
+          product.model.toLowerCase().includes(filterValue.toLowerCase())
+      );
+    }
 
     return filteredProducts;
   }, [products, hasSearchFilter, categoryFilter, statusFilter, filterValue]);
+
+  const onSearchChange = (value?: string) => {
+    if (value) {
+      setFilterValue(value);
+    } else {
+      setFilterValue("");
+    }
+  };
 
   const renderCell = useCallback((product: Product, columnKey: React.Key) => {
     const cellValue = product[columnKey as keyof Product];
