@@ -93,6 +93,16 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
       );
     }
 
+    if (
+      statusFilter !== "" &&
+      Array.from(statusFilter.split(",")).length !== status.length
+    ) {
+      filteredProducts = filteredProducts.filter((product) =>
+        Array.from(statusFilter.split(",")).includes(product.status)
+      );
+    }
+
+
     return filteredProducts;
   }, [products, hasSearchFilter, categoryFilter, statusFilter, filterValue]);
 
