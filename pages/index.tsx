@@ -83,6 +83,7 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const hasSearchFilter = Boolean(filterValue);
+
   const filteredItems = useMemo(() => {
     let filteredProducts = products;
     if (hasSearchFilter) {
@@ -102,6 +103,14 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
       );
     }
 
+    if (
+      categoryFilter !== "" &&
+      Array.from(categoryFilter.split(",")).length !== categories.length
+    ) {
+      filteredProducts = filteredProducts.filter((product) =>
+        Array.from(categoryFilter.split(",")).includes(product.category)
+      );
+    }
 
     return filteredProducts;
   }, [products, hasSearchFilter, categoryFilter, statusFilter, filterValue]);
