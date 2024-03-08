@@ -42,13 +42,17 @@ export const ProductEntryForm = (props: any) => {
                 label="IMEI"
                 type="text"
                 isRequired
+                value={imei}
+                onChange={(e) => setImei(e.target.value)}
               />
               <Input
                 placeholder="Enter phone model"
                 aria-label="Phone model"
                 labelPlacement="outside"
+                value={model}
                 label="Model"
                 isRequired
+                onChange={(e) => setModel(e.target.value)}
                 type="text"
               />
               <Input
@@ -59,6 +63,7 @@ export const ProductEntryForm = (props: any) => {
                 value={price}
                 isRequired
                 labelPlacement="outside"
+                onChange={(e) => setPrice(e.target.value)}
                 startContent={
                   <div className="pointer-events-none flex items-center">
                     <span className="text-default-400 text-small">$</span>
