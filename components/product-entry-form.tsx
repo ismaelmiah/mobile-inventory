@@ -18,6 +18,13 @@ export const ProductEntryForm = (props: any) => {
   const [category, setCategory] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
 
+  const product: Product = props.product;
+  const isOpen: any = props.isOpen;
+  const onSave: any = props.onSave;
+  const onOpenChange: any = props.onOpenChange;
+  const categories: any[] = props.categories;
+  const defaultCategory: any = props.defaultCategory;
+
 
   return (
     <Modal
@@ -70,6 +77,27 @@ export const ProductEntryForm = (props: any) => {
                   </div>
                 }
               />
+              <div>
+                <Autocomplete
+                  placeholder="Search category"
+                  aria-label="Category"
+                  defaultItems={categories as any[]}
+                  labelPlacement="outside"
+                  label="Category"
+                  value={category}
+                  onInputChange={setCategory}
+                  isRequired
+                  disableSelectorIconRotation
+                  defaultSelectedKey={category}
+                >
+                  {(item) => (
+                    <AutocompleteItem key={item.uid} value={item.uid}>
+                      {item.name}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
+              </div>
+
             </ModalBody>
             <ModalFooter>
               <Button color="danger" variant="flat" onPress={onClose}>
