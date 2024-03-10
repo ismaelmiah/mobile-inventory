@@ -25,6 +25,14 @@ export const ProductEntryForm = (props: any) => {
   const categories: any[] = props.categories;
   const defaultCategory: any = props.defaultCategory;
 
+  const isValidForm = () => {
+    return imei != "" && model != "" && price != "" && category != "";
+  }
+  const handleFormSubmit = () => {
+    onSave({ imei, model, price, category });
+    resetForm();
+  }
+
 
   return (
     <Modal
@@ -105,6 +113,12 @@ export const ProductEntryForm = (props: any) => {
               </Button>
               <Button
                 color="primary"
+                onPress={() => {
+                  if (isValidForm()) {
+                    onClose();
+                    handleFormSubmit();
+                  }
+                }}
               >
                 {isUpdate ? "Update" : "Save"}
               </Button>
