@@ -11,6 +11,7 @@ import {
   ChipProps,
   useDisclosure,
 } from "@nextui-org/react";
+import { ProductEntryForm } from "@/components/product-entry-form";
 import { ProductSearchBar } from "@/components/product-search-bar";
 import { categories, status, columns, Product } from "@/models";
 import { EditIcon, MobileIcon, DeleteIcon } from "@/models/Icon";
@@ -82,6 +83,17 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const handleSaveProduct = (data: any) => {
+    const { imei, model, price, category } = data;
+    filteredItems.push({
+      imei: imei,
+      model: model,
+      price: price,
+      category: category,
+      status: "entry",
+    } as Product);
+  };
+
   const hasSearchFilter = Boolean(filterValue);
 
   const filteredItems = useMemo(() => {
@@ -207,6 +219,15 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
           )}
         </TableBody>
       </Table>
+
+      <ProductEntryForm
+        isOpen={entryModal.isOpen}
+        onOpenChange={entryModal.onOpenChange}
+        categories={categories}
+        onSave={handleSaveProduct}
+        product={selectedProduct}
+        defaultCategory={categories.find(c => c.uid == selectedProduct?.category)?.uid}
+      />
     </>
   );
 };
