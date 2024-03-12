@@ -83,6 +83,8 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
   const handleSaveProduct = (data: any) => {
     const { imei, model, price, category } = data;
     filteredItems.push({
@@ -92,6 +94,9 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
       category: category,
       status: "entry",
     } as Product);
+  };
+  const handleRowProduct = (product: any, saleProduct: boolean, updateProduct: boolean) => {
+    setSelectedProduct(product);
   };
 
   const hasSearchFilter = Boolean(filterValue);
@@ -158,6 +163,7 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
               <button
               aria-label="Product sale button"
               aria-labelledby="Product sale"
+                onClick={() => handleRowProduct(product, true, false)}
                 className="text-lg text-white bg-sky-500 px-2 py-1 rounded-md hover:bg-sky-300 cursor-pointer active:opacity-50"
               >
                 <MobileIcon />
@@ -195,6 +201,7 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
             setCategoryFilter={setCategoryFilter}
             setStatusFilter={setStatusFilter}
             statusOptions={status}
+            setProductNull={() => setSelectedProduct(null)}            
           />
         }
         aria-label="Product table"

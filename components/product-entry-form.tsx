@@ -1,3 +1,4 @@
+import { Product } from "@/models";
 import {
   Modal,
   ModalContent,
@@ -28,11 +29,29 @@ export const ProductEntryForm = (props: any) => {
   const isValidForm = () => {
     return imei != "" && model != "" && price != "" && category != "";
   }
+
+  const resetForm = () => {
+    setImei("");
+    setModel("");
+    setCategory("");
+    setPrice("");
+  }
+
   const handleFormSubmit = () => {
     onSave({ imei, model, price, category });
     resetForm();
   }
 
+  useEffect(() => {
+    setIsUpdate(!product);
+    if (product != null) {
+      setImei(product.imei);
+      setModel(product.model);
+      setCategory(defaultCategory);
+      setPrice(product.price.toString());
+    }
+    else resetForm();
+  }, [product])
 
   return (
     <Modal
