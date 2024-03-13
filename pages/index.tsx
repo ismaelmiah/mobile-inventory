@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 import { ProductEntryForm } from "@/components/product-entry-form";
 import { ProductSearchBar } from "@/components/product-search-bar";
+import { ProductSaleForm } from "@/components/product-sale-form";
 import { categories, status, columns, Product } from "@/models";
 import { EditIcon, MobileIcon, DeleteIcon } from "@/models/Icon";
 
@@ -234,6 +235,9 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
         onSave={handleSaveProduct}
         product={selectedProduct}
         defaultCategory={categories.find(c => c.uid == selectedProduct?.category)?.uid}
+      />
+
+      <ProductSaleForm
       />
     </>
   );
