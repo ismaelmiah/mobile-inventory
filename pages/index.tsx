@@ -96,9 +96,37 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
       status: "entry",
     } as Product);
   };
+
+  const formatDate = (date: Date) => {
+    const options: Intl.DateTimeFormatOptions = {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    };
+
+    return new Intl.DateTimeFormat('en-GB', options).format(date);
+  };
+
   const handleRowProduct = (product: any, saleProduct: boolean, updateProduct: boolean) => {
     setSelectedProduct(product);
   };
+
+  const handleSaleProduct = (imei: any, price: any) => {
+    const indexToUpdate = products.findIndex((p) => p.imei == imei);
+    const updatedData = [...products];
+    updatedData[indexToUpdate] = {
+      ...updatedData[indexToUpdate],
+      status: "sold",
+      sale_price: price,
+      sale_date: formatDate(new Date()),
+    };
+
+    setProducts(updatedData);
+  };
+
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -238,6 +266,10 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
       />
 
       <ProductSaleForm
+        isOpen={saleModal.isOpen}
+        product={selectedProduct}
+        onOpenChange={saleModal.onOpenChange}
+        onSale={handleSaleProduct}
       />
     </>
   );
