@@ -112,6 +112,10 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
 
   const handleRowProduct = (product: any, saleProduct: boolean, updateProduct: boolean) => {
     setSelectedProduct(product);
+
+    if (saleProduct) saleModal.onOpen();
+    else if (updateProduct) entryModal.onOpen();
+    else console.log('Delete');
   };
 
   const handleSaleProduct = (imei: any, price: any) => {
@@ -201,6 +205,7 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
             <button
               aria-label="Product update button"
               aria-labelledby="Product update"
+              onClick={() => handleRowProduct(product, false, true)}
               className="text-lg text-white bg-orange-500 px-2 py-2 rounded-md hover:bg-orange-300 cursor-pointer active:opacity-50">
               <EditIcon />
             </button>
@@ -208,6 +213,7 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
               <button
               aria-label="Product delete button"
               aria-labelledby="Product delete"
+                onClick={() => handleRowProduct(product, false, false)}
                 className="text-lg text-white bg-red-600 px-2 py-2 rounded-md hover:bg-red-300  cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </button>

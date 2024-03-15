@@ -9,6 +9,7 @@ export const ProductSearchBar = (props: any) => {
     setCategoryFilter,
     setStatusFilter,
     statusOptions,
+    setProductNull
   } = props;
 
   return (
@@ -68,6 +69,7 @@ export const ProductSearchBar = (props: any) => {
         <div className="flex gap-3">
           <Button color="primary" 
           onPress={() => {
+            setProductNull();
             onOpen()
           }}
            endContent={<PlusIcon />}>
