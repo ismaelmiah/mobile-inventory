@@ -22,6 +22,14 @@ export const ProductSaleForm = (props: any) => {
     setPrice(product?.price.toString());
   }, [product])
 
+  const isValidForm = () => {
+    return Number.parseInt(price as string) >= product.price;
+  };
+
+  const handleFormSubmit = () => {    
+    onSale(product.imei, price);    
+  };
+
   return (
     <Modal
       isOpen={isOpen}
