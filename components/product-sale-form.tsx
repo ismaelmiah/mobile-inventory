@@ -86,6 +86,12 @@ export const ProductSaleForm = (props: any) => {
               </Button>
               <Button
                 color="success"
+                onPress={() => {
+                  if (isValidForm()) {
+                    onClose();
+                    handleFormSubmit();
+                  }
+                }}
               >
                 Sale
               </Button>
