@@ -16,6 +16,7 @@ import { ProductSearchBar } from "@/components/product-search-bar";
 import { ProductSaleForm } from "@/components/product-sale-form";
 import { categories, status, columns, Product } from "@/models";
 import { EditIcon, MobileIcon, DeleteIcon } from "@/models/Icon";
+import { ProductDeleteModal } from "@/components/product-delete-modal";
 
 export async function getServerSideProps() {
   //const res = await fetch('https://sheetdb.io/api/v1/j5309zo0rjobp');
@@ -77,45 +78,61 @@ interface Props {
 }
 
 const HomePage: NextPage<Props> = ({ data }: Props) => {
-
   const [products, setProducts] = useState(data);
+  const deleteModal = useDisclosure();
   const saleModal = useDisclosure();
   const entryModal = useDisclosure();
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(
+    undefined
+  );
 
   const handleSaveProduct = (data: any) => {
     const { imei, model, price, category } = data;
-    filteredItems.push({
+
+    const updatedData = [...products];
+
+    updatedData.push({
       imei: imei,
       model: model,
       price: price,
       category: category,
       status: "entry",
     } as Product);
+
+    setProducts(updatedData);
   };
 
   const formatDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     };
 
-    return new Intl.DateTimeFormat('en-GB', options).format(date);
+    return new Intl.DateTimeFormat("en-GB", options).format(date);
   };
 
-  const handleRowProduct = (product: any, saleProduct: boolean, updateProduct: boolean) => {
+  const handleRowProduct = (
+    product: any,
+    saleProduct: boolean,
+    updateProduct: boolean
+  ) => {
     setSelectedProduct(product);
+    const category = categories.find((c) => c.uid == product?.category)?.uid;
+    setSelectedCategory(category);
 
+    console.log("selected product: ", product);
+    console.log("selected category: ", selectedCategory, "-", category);
     if (saleProduct) saleModal.onOpen();
     else if (updateProduct) entryModal.onOpen();
-    else console.log('Delete');
+    else deleteModal.onOpen();
   };
 
   const handleSaleProduct = (imei: any, price: any) => {
@@ -131,6 +148,11 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
     setProducts(updatedData);
   };
 
+  const handleDeleteProduct = (imei: any) => {
+    const updatedData = products.filter((p) => p.imei != imei);
+
+    setProducts(updatedData);
+  };
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -191,11 +213,11 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
+          <div className="relative flex gap-2">
             {product.status == "entry" && (
               <button
-              aria-label="Product sale button"
-              aria-labelledby="Product sale"
+                aria-label="Product sale button"
+                aria-labelledby="Product sale"
                 onClick={() => handleRowProduct(product, true, false)}
                 className="text-lg text-white bg-sky-500 px-2 py-1 rounded-md hover:bg-sky-300 cursor-pointer active:opacity-50"
               >
@@ -206,15 +228,17 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
               aria-label="Product update button"
               aria-labelledby="Product update"
               onClick={() => handleRowProduct(product, false, true)}
-              className="text-lg text-white bg-orange-500 px-2 py-2 rounded-md hover:bg-orange-300 cursor-pointer active:opacity-50">
+              className="text-lg text-white bg-orange-500 px-2 py-2 rounded-md hover:bg-orange-300 cursor-pointer active:opacity-50"
+            >
               <EditIcon />
             </button>
             {product.status == "entry" && (
               <button
-              aria-label="Product delete button"
-              aria-labelledby="Product delete"
+                aria-label="Product delete button"
+                aria-labelledby="Product delete"
                 onClick={() => handleRowProduct(product, false, false)}
-                className="text-lg text-white bg-red-600 px-2 py-2 rounded-md hover:bg-red-300  cursor-pointer active:opacity-50">
+                className="text-lg text-white bg-red-600 px-2 py-2 rounded-md hover:bg-red-300  cursor-pointer active:opacity-50"
+              >
                 <DeleteIcon />
               </button>
             )}
@@ -236,7 +260,7 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
             setCategoryFilter={setCategoryFilter}
             setStatusFilter={setStatusFilter}
             statusOptions={status}
-            setProductNull={() => setSelectedProduct(null)}            
+            setProductNull={() => setSelectedProduct(null)}
           />
         }
         aria-label="Product table"
@@ -264,18 +288,27 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
 
       <ProductEntryForm
         isOpen={entryModal.isOpen}
+        onClose={entryModal.onClose}
         onOpenChange={entryModal.onOpenChange}
         categories={categories}
         onSave={handleSaveProduct}
         product={selectedProduct}
-        defaultCategory={categories.find(c => c.uid == selectedProduct?.category)?.uid}
+        defaultCategory={selectedCategory}
       />
 
       <ProductSaleForm
         isOpen={saleModal.isOpen}
+        onClose={saleModal.onClose}
         product={selectedProduct}
         onOpenChange={saleModal.onOpenChange}
         onSale={handleSaleProduct}
+      />
+
+      <ProductDeleteModal
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.onClose}
+        iemi={selectedProduct?.imei}
+        onDelete={handleDeleteProduct}
       />
     </>
   );
