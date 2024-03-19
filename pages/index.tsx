@@ -30,7 +30,7 @@ export async function getServerSideProps() {
       status: "entry",
       category: "samsung",
       sale_date: null,
-      sale_price: null,
+      sale_price: 560,
     },
     {
       imei: "222222",
@@ -61,9 +61,25 @@ export async function getServerSideProps() {
     },
   ];
 
+  var investment = 0,
+    sale = 0,
+    profit = 0;
+
+  products.forEach((item) => {
+    if (item.status === "entry") {
+      investment += item.price;
+    }
+
+    sale += item.sale_price !== null ? item.sale_price : 0;
+    profit += item.sale_price !== null ? item.sale_price - item.price : 0;
+  });
+
   return {
     props: {
-      data: products,
+      products: products,
+      investment: investment,
+      sale: sale,
+      profit: profit,
     },
   };
 }
@@ -74,14 +90,20 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 };
 
 interface Props {
-  data: Product[];
+  products: Product[];
+  investment: number;
+  sale: number;
+  profit: number;
 }
 
-const HomePage: NextPage<Props> = ({ data }: Props) => {
-  const [products, setProducts] = useState(data);
+const HomePage: NextPage<Props> = (data: Props) => {
   const deleteModal = useDisclosure();
   const saleModal = useDisclosure();
   const entryModal = useDisclosure();
+  const [investment, setInvestment] = useState(data.investment);
+  const [sale, setSale] = useState(data.sale);
+  const [profit, SetProfit] = useState(data.profit);
+  const [products, setProducts] = useState(data.products);
   const [filterValue, setFilterValue] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -103,6 +125,7 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
       status: "entry",
     } as Product);
 
+    setInvestment(investment => investment + data.price);
     setProducts(updatedData);
   };
 
@@ -145,6 +168,8 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
       sale_date: formatDate(new Date()),
     };
 
+    setSale(sale => sale + price);
+    SetProfit(profit => profit + (price - updatedData[indexToUpdate].price));
     setProducts(updatedData);
   };
 
@@ -261,6 +286,9 @@ const HomePage: NextPage<Props> = ({ data }: Props) => {
             setStatusFilter={setStatusFilter}
             statusOptions={status}
             setProductNull={() => setSelectedProduct(null)}
+            investment={investment}
+            sale={sale}
+            profit={profit}
           />
         }
         aria-label="Product table"

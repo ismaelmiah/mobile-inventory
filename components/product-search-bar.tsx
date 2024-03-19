@@ -9,7 +9,10 @@ export const ProductSearchBar = (props: any) => {
     setCategoryFilter,
     setStatusFilter,
     statusOptions,
-    setProductNull
+    setProductNull,
+    investment,
+    sale,
+    profit
   } = props;
 
   return (
@@ -57,13 +60,13 @@ export const ProductSearchBar = (props: any) => {
           </Select>
 
           <div className="px-4 py-2 text-2xl text-red-900 font-semibold">
-            Investment: 120434
+            Investment: {investment}
           </div>
           <div className="px-4 py-2 text-2xl text-blue-900 font-semibold">
-            Sale: 120434
+            Sale: {sale}
           </div>
           <div className="px-4 py-2 text-2xl text-green-900 font-semibold">
-            Profit: 120434
+            Profit: {profit}
           </div>
         </div>
         <div className="flex gap-3">
