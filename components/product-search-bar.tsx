@@ -10,9 +10,10 @@ export const ProductSearchBar = (props: any) => {
     setStatusFilter,
     statusOptions,
     setProductNull,
+    setSelectedCategory,
     investment,
     sale,
-    profit
+    profit,
   } = props;
 
   return (
@@ -37,7 +38,7 @@ export const ProductSearchBar = (props: any) => {
             }}
           >
             {(phoneCategories as any[]).map((item) => (
-              <SelectItem key={item.uid} value={item.uid}>
+              <SelectItem key={item.cid} value={item.cid}>
                 {item.name}
               </SelectItem>
             ))}
@@ -70,12 +71,15 @@ export const ProductSearchBar = (props: any) => {
           </div>
         </div>
         <div className="flex gap-3">
-          <Button color="primary" 
+          <Button
+            color="primary"
           onPress={() => {
             setProductNull();
-            onOpen()
+              setSelectedCategory();
+              onOpen();
           }}
-           endContent={<PlusIcon />}>
+            endContent={<PlusIcon />}
+          >
             Add New
           </Button>
         </div>

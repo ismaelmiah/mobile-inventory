@@ -1,11 +1,16 @@
 export interface Product {
   imei: string;
   model: string;
-  price: number;
+  price: string;
   category: string;
   status: string;
   sale_date: string | null;
-  sale_price: number | null;
+  sale_price: string | null;
+}
+
+export interface Category{
+  name: string;
+  cid: string;
 }
 
 export const columns = [
@@ -24,8 +29,8 @@ export const status = [
   { name: "Entry", uid: "entry" },
 ];
 
-export const categories = [
-  { name: "Realme", uid: "realme" },
-  { name: "Xiaomi", uid: "xiaomi" },
-  { name: "Samsung", uid: "samsung" },
+export const categories: Category[] = [
+  { name: "Realme", cid: "realme" },
+  { name: "Xiaomi", cid: "xiaomi" },
+  { name: "Samsung", cid: "samsung" },
 ];

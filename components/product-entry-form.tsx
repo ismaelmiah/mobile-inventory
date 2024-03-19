@@ -19,12 +19,12 @@ export const ProductEntryForm = (props: any) => {
   const onSave: any = props.onSave;
   const onOpenChange: any = props.onOpenChange;
   const categories: any[] = props.categories;
-  const defaultCategory: any = props.defaultCategory;
+  const defaultCategory: any = props.defaultCategory || "";
 
   const [imei, setImei] = useState("");
   const [model, setModel] = useState("");
   const [price, setPrice] = useState("");
-  const [category, setCategory] = useState(defaultCategory);
+  const [category, setCategory] = useState("");
   const [isUpdate, setIsUpdate] = useState(false);
 
   const isValidForm = () => {
@@ -34,7 +34,7 @@ export const ProductEntryForm = (props: any) => {
   const resetForm = () => {
     setImei("");
     setModel("");
-    setCategory(defaultCategory);
+    setCategory("");
     setPrice("");
   };
 
@@ -50,9 +50,9 @@ export const ProductEntryForm = (props: any) => {
       setModel(product.model);
       setCategory(defaultCategory);
       setPrice(product.price.toString());
-
-      console.log("useEffect category: ", defaultCategory, " -: ", category);
-    } else resetForm();
+    } else {
+      resetForm();
+    }
   }, [product, defaultCategory]);
   console.log("outside of useEffect: ", category);
   return (
@@ -113,10 +113,10 @@ export const ProductEntryForm = (props: any) => {
               onInputChange={setCategory}
               isRequired
               disableSelectorIconRotation
-              defaultSelectedKey={category}
+              defaultSelectedKey={defaultCategory}
             >
               {(item) => (
-                <AutocompleteItem key={item.uid} value={item.uid}>
+                <AutocompleteItem key={item.cid} value={item.cid}>
                   {item.name}
                 </AutocompleteItem>
               )}
@@ -136,7 +136,7 @@ export const ProductEntryForm = (props: any) => {
               }
             }}
           >
-            {isUpdate ? "Update" : "Save"}
+            {isUpdate ? "Save" : "Update"}
           </Button>
         </ModalFooter>
       </ModalContent>
